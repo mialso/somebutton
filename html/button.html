@@ -1,0 +1,32 @@
+<!doctype html>
+</html>
+    <head>
+        <title>button example</title>
+        <style>
+            .SomeButton {
+                width: 100px;
+                height: 40px;
+                background-color: #000;
+                border: unset;
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body>
+        <button class="SomeButton">My button</button>
+        <script>
+            function myFetch() {
+                return new Promise(resolve => setTimeout(() => resolve('my data'), 3000));
+            }
+
+            function setUpUI() {
+                const myButton = document.querySelector(".SomeButton");
+                myButton.onclick = () =>  myFetch().then(data => console.log('data'));
+            }
+
+            document.addEventListener('DOMContentLoaded', setUpUI);
+            
+        </script>
+    </body>
+</html>
+
