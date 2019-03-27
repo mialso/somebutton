@@ -4,7 +4,7 @@
         <title>button example</title>
         <style>
             .SomeButton {
-                width: 100px;
+                min-width: 100px;
                 height: 40px;
                 background-color: #000;
                 border: unset;
@@ -21,7 +21,7 @@
         <button class="SomeButton">My button</button>
         <script>
             function myFetch() {
-                return new Promise(resolve => setTimeout(() => resolve('my data'), 3000));
+                return new Promise(resolve => setTimeout(() => resolve('data'), 3000));
             }
 
             function setUpUI() {
@@ -31,7 +31,8 @@
                     // inform user that action took place by the means of css cursor change
                     e.target.disabled = true;
                     myFetch().then(data => {
-                        console.log('data');
+                        // append data received:
+                        e.target.innerHTML = e.target.innerHTML.concat(`:${data}`);
                         // restore normal state back
                         e.target.disabled = false;
                     });
