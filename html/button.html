@@ -9,6 +9,11 @@
                 background-color: #000;
                 border: unset;
                 color: #fff;
+                cursor: pointer;
+            }
+            .SomeButton:disabled {
+                background-color: #777;
+                cursor: wait;
             }
         </style>
     </head>
@@ -21,7 +26,16 @@
 
             function setUpUI() {
                 const myButton = document.querySelector(".SomeButton");
-                myButton.onclick = () =>  myFetch().then(data => console.log('data'));
+                myButton.onclick = (e) =>  {
+                    // ensure only one fetch is sent
+                    // inform user that action took place by the means of css cursor change
+                    e.target.disabled = true;
+                    myFetch().then(data => {
+                        console.log('data');
+                        // restore normal state back
+                        e.target.disabled = false;
+                    });
+                }
             }
 
             document.addEventListener('DOMContentLoaded', setUpUI);
