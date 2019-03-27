@@ -18,29 +18,63 @@
         </style>
     </head>
     <body>
-        <button class="SomeButton">My button</button>
+        <div id="app"></div>
         <script>
+            // services
             function myFetch() {
                 return new Promise(resolve => setTimeout(() => resolve('data'), 3000));
             }
+        </script>
+        <script>
+            // view
+            const defaultProps = { isDisabled: false, text: 'My button' };
 
-            function setUpUI() {
-                const myButton = document.querySelector(".SomeButton");
-                myButton.onclick = (e) =>  {
-                    // ensure only one fetch is sent
-                    // inform user that action took place by the means of css cursor change
-                    e.target.disabled = true;
-                    myFetch().then(data => {
-                        // append data received:
-                        e.target.innerHTML = e.target.innerHTML.concat(`:${data}`);
-                        // restore normal state back
-                        e.target.disabled = false;
-                    });
-                }
+            function SomeButton(props = defaultProps) {
+                const { isDisabled, text } = props;
+                return {
+                    html: `<button class="SomeButton" ${isDisabled ? "disabled" : ""}>${text}</button>`,
+                    handlers: {
+                        onclick: someButtonClickHandler,
+                    },
+                };
             }
 
-            document.addEventListener('DOMContentLoaded', setUpUI);
+            const someButtonClickHandler = (e) =>  {
+                // ensure only one fetch is sent
+                // inform user that action took place by the means of css cursor change
+                e.target.disabled = true;
+                myFetch().then(data => {
+                    // append data received:
+                    e.target.innerHTML = e.target.innerHTML.concat(`:${data}`);
+                    // restore normal state back
+                    e.target.disabled = false;
+                });
+            }
+        </script>
+        <script>
+            // app init and render
+            function renderUI() {
+                const app = document.getElementById("app");
+                app.appendChild(createDOMElement(SomeButton));
+            }
+
+            document.addEventListener('DOMContentLoaded', renderUI);
             
+        </script>
+        <script>
+            // render utils
+            function createDOMElement(factory) {
+                const { html, handlers } = factory();
+                const element = htmlToElement(html);
+                Object.keys(handlers).forEach(key => element[key] = handlers[key]);
+                return element;
+            }
+            function htmlToElement(html) {
+                var template = document.createElement('template');
+                html = html.trim(); // Never return a text node of whitespace as the result
+                template.innerHTML = html;
+                return template.content.firstChild;
+            }
         </script>
     </body>
 </html>
