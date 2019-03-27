@@ -16,6 +16,7 @@
                 cursor: wait;
             }
         </style>
+        <script src="../js/framework.js"></script>
     </head>
     <body>
         <div id="app"></div>
@@ -55,26 +56,11 @@
             // app init and render
             function renderUI() {
                 const app = document.getElementById("app");
-                app.appendChild(createDOMElement(SomeButton));
+                Framework.render(app, SomeButton);
             }
 
             document.addEventListener('DOMContentLoaded', renderUI);
             
-        </script>
-        <script>
-            // render utils
-            function createDOMElement(factory) {
-                const { html, handlers } = factory();
-                const element = htmlToElement(html);
-                Object.keys(handlers).forEach(key => element[key] = handlers[key]);
-                return element;
-            }
-            function htmlToElement(html) {
-                var template = document.createElement('template');
-                html = html.trim(); // Never return a text node of whitespace as the result
-                template.innerHTML = html;
-                return template.content.firstChild;
-            }
         </script>
     </body>
 </html>
